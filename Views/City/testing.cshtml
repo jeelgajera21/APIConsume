@@ -1,0 +1,65 @@
+﻿@model StateDropDownModel
+<div class="row">
+    <label for="CountryID" class="form-label fw-bold row">Country ID for state</label>
+
+    <div class="row">
+        <div class="row mb-3">
+            <label for="inputDate" class="col-sm-2 col-form-label">CountryName</label>
+            <div class="col">
+                <select class="form-control" id="CountryID" name="CountryID" required onchange="navigateToTesting()">
+                    <option disabled selected="true" value="0">Select Country from dropdown</option>
+                    @foreach (var i in ViewBag.countrylist)
+                    {
+                        <option id="getCountryButton" value=@i.CountryID>@i.CountryName</option>
+                    }
+                </select>
+                <span class="text-danger"></span>
+
+            </div>
+        </div>
+        @*  <input type="number" id="CountryID" name="CountryID" class="form-control col" required onchange="updateRoute()" /> *@
+
+
+    </div>
+
+    <script>
+        function navigateToTesting() {
+            // Get the input value
+            const countryID = document.getElementById("CountryID").value;
+
+            // Ensure the value is valid
+            if (countryID) {
+                // Redirect to the 'testing' action with the 'cid' parameter
+                window.location.href = /City/testing ? cid = ${ countryID };
+            } else {
+                alert("Please enter a valid Country ID");
+            }
+        }
+    </script>
+    <main id="main" class="main container">
+
+        @foreach (var i in ViewBag.statelist)
+        {
+            <tr>
+                <td>@i.StateID</td>
+
+                <td>@i.StateName</td>
+            </tr>
+        }
+
+        <div class="row mb-3">
+            <label for="inputDate" class="col-sm-2 col-form-label">StateName</label>
+            <div class="col">
+                <select class="form-control">
+                    <option disabled selected="true" value="0">Select State from dropdown</option>
+                    @foreach (var i in ViewBag.statelist)
+                    {
+                        <option value=@i.StateID>@i.StateName</option>
+                    }
+                </select>
+                <span class="text-danger"></span>
+
+            </div>
+        </div>
+        <button type="button" class="btn btn-success col-1" id="getCountryButton" onclick="navigateToTesting()">Get</button>
+    </main>
