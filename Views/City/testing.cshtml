@@ -22,20 +22,7 @@
 
     </div>
 
-    <script>
-        function navigateToTesting() {
-            // Get the input value
-            const countryID = document.getElementById("CountryID").value;
-
-            // Ensure the value is valid
-            if (countryID) {
-                // Redirect to the 'testing' action with the 'cid' parameter
-                window.location.href = /City/testing ? cid = ${ countryID };
-            } else {
-                alert("Please enter a valid Country ID");
-            }
-        }
-    </script>
+   
     <main id="main" class="main container">
 
         @foreach (var i in ViewBag.statelist)
@@ -63,3 +50,65 @@
         </div>
         <button type="button" class="btn btn-success col-1" id="getCountryButton" onclick="navigateToTesting()">Get</button>
     </main>
+
+    <script>
+        async function navigateToTesting() {
+            // Get the selected country ID
+            const countryID = document.getElementById("CountryID").value;
+
+            // Ensure the value is valid
+            if (countryID) {
+                try {
+                    // Make an API call to get the state list
+                    const response = await fetch(`/City/testing?cid=${countryID}`);
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch state list.");
+                    }
+
+                    const states = await response.json();
+
+                    // Populate the state dropdown
+                    const stateDropdown = document.getElementById("StateDropdown");
+                    stateDropdown.innerHTML = ""; // Clear existing options
+
+                    // Add default option
+                    const defaultOption = document.createElement("option");
+                    defaultOption.text = "Select State from dropdown";
+                    defaultOption.disabled = true;
+                    defaultOption.selected = true;
+                    defaultOption.value = "0";
+                    stateDropdown.appendChild(defaultOption);
+
+                    // Add new options
+                    states.forEach((state) => {
+                        const option = document.createElement("option");
+                        option.value = state.StateID;
+                        option.text = state.StateName;
+                        stateDropdown.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error(error);
+                    alert("Error fetching states. Please try again later.");
+                }
+            } else {
+                alert("Please select a valid country.");
+            }
+        }
+    </script>
+
+
+    @* <script>
+        function navigateToTesting() {
+            // Get the input value
+            const countryID = document.getElementById("CountryID").value;
+
+            // Ensure the value is valid
+            if (countryID) {
+                // Redirect to the 'testing' action with the 'cid' parameter
+                window.location.href = `/City/testing?cid=${countryID}`;
+            } else {
+                alert("Please enter a valid Country ID");
+            }
+        }
+    </script>
+ *@

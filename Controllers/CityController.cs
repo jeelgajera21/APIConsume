@@ -111,19 +111,19 @@ namespace APIConsume.Controllers
              return Json(states);
          }*/
 
-        [HttpGet]
-        public async Task<IActionResult> GetStatesByCountry(int cid)
+        [HttpPost]
+        public async Task<JsonResult> GetStatesByCountry([FromBody] int CountryID)
         {
-            var states = await GetStatesByCountryID(cid); // Existing logic
-            return Json(states); // Return states as JSON
+            // Fetch states based on the CountryID
+            var states = await GetStatesByCountryID(CountryID);
+
+            // Return as JSON
+            return Json(states);
         }
-
-       
-
-
 
         private async Task<List<StateDropDownModel>> GetStatesByCountryID(int CountryID)
         {
+            // Example: Replace with your API/service logic
             var response = await _client.GetAsync($"{_client.BaseAddress}/State/by-country/{CountryID}");
             if (response.IsSuccessStatusCode)
             {
@@ -133,7 +133,7 @@ namespace APIConsume.Controllers
             return new List<StateDropDownModel>();
         }
 
-   
+
 
         private async Task<List<CountryDropDownModel>> GetCountryList()
         {
@@ -146,10 +146,10 @@ namespace APIConsume.Controllers
             return new List<CountryDropDownModel>();
         }
 
-        public async Task<IActionResult> Testing(int cid = 2)
+        public async Task<IActionResult> Testing(int cid =2)
         {
-            var state = await GetStatesByCountryID(cid);
             var country = await GetCountryList();
+            var state = await GetStatesByCountryID(cid);
             ViewBag.countrylist = country;
 
             ViewBag.statelist = state;
